@@ -7,10 +7,10 @@ WORKDIR /app
 # Copy the entire project into the container
 COPY . .
 
-# Grant executable permission to the Maven wrapper script
+# Grant executable permissions to Maven wrapper script
 RUN chmod +x ./mvnw
 
-# Run the Maven build to create the target folder and package the application
+# Build the project and skip tests to create the JAR file
 RUN ./mvnw clean package -DskipTests
 
 # Use a lightweight Java runtime image for the final container
@@ -25,5 +25,5 @@ COPY --from=build /app/target/*.jar app.jar
 # Expose the application port
 EXPOSE 8080
 
-# Command to run the application
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Run the application
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
