@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -30,9 +32,12 @@ public class UserController {
     private final JWTGenerator jwtGenerator;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterDTO registerDto){
+    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterDTO registerDto) {
         if(userRepository.existsByUsername(registerDto.getUsername())){
-            return new ResponseEntity<>("Username is Taken", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(
+                    Collections.singletonMap("message", "Username is Taken"),
+                    HttpStatus.BAD_REQUEST
+            );
         }
 
         User user = new User();
@@ -41,7 +46,10 @@ public class UserController {
 
         userRepository.save(user);
 
-        return new ResponseEntity<>("User registered success", HttpStatus.CREATED);
+        return new ResponseEntity<>(
+                Collections.singletonMap("message", "User registered success"),
+                HttpStatus.CREATED
+        );
     }
 
     @PostMapping("/login")
