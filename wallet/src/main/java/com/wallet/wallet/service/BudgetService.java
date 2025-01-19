@@ -78,10 +78,6 @@ public class BudgetService {
             );
 
 
-            // Update the budget amount even if it exceeds the limit
-            budget.setCurrentAmount(newAmount);
-            budgetRepository.save(budget);
-
             // Throw the exception after saving notification and updating budget
             throw new BudgetExceededException(notificationMessage);
         }
